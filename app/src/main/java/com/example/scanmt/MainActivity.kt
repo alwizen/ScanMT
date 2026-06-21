@@ -46,6 +46,7 @@ class MainActivity : ComponentActivity() {
     private var latitudeState = mutableStateOf<Double?>(null)
     private var longitudeState = mutableStateOf<Double?>(null)
     private var isSendingState = mutableStateOf(false)
+    private var deviceUuidState = mutableStateOf("")
 
     // Launcher untuk meminta izin Lokasi/GPS
     private val requestPermissionLauncher = registerForActivityResult(
@@ -73,6 +74,7 @@ class MainActivity : ComponentActivity() {
         }
 
         driverNameState.value = sessionManager.getDriverName() ?: "Driver"
+        deviceUuidState.value = Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
 
         // Inisialisasi NFC
         nfcAdapter = NfcAdapter.getDefaultAdapter(this)
@@ -149,6 +151,12 @@ class MainActivity : ComponentActivity() {
                 Text(
                     text = "Lokasi: ${locationState.value}",
                     style = MaterialTheme.typography.bodyMedium,
+                    color = Color.Gray
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = "Device UUID: ${deviceUuidState.value}",
+                    style = MaterialTheme.typography.bodySmall,
                     color = Color.Gray
                 )
                 Spacer(modifier = Modifier.height(16.dp))
@@ -262,7 +270,17 @@ class MainActivity : ComponentActivity() {
                         Toast.makeText(this@MainActivity, scanResponse?.message ?: "Gagal scan", Toast.LENGTH_SHORT).show()
                     }
                 } else {
-                    Toast.makeText(this@MainActivity, "Error Server: ${response.code()}", Toast.LENGTH_SHORT).show()
+                    val errorBody = response.errorBody()?.string()
+                    var errorMessage = "Error Server: ${response.code()}"
+                    if (!errorBody.isNullOrEmpty()) {
+                        try {
+                            val jsonObject = org.json.JSONObject(errorBody)
+                            errorMessage = jsonObject.optString("message", errorMessage)
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                        }
+                    }
+                    Toast.makeText(this@MainActivity, errorMessage, Toast.LENGTH_LONG).show()
                 }
             }
 

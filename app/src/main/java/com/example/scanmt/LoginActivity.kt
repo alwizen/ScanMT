@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.dp
 import com.example.scanmt.model.LoginRequest
 import com.example.scanmt.model.LoginResponse
 import com.example.scanmt.network.RetrofitClient
-import com.example.scanmt.ui.theme.ScanMTTheme // Pastikan import theme ini sesuai nama project Anda
+import com.example.scanmt.ui.theme.ScanMTTheme
 import com.example.scanmt.utils.SessionManager
 import retrofit2.Call
 import retrofit2.Callback
@@ -127,7 +127,17 @@ class LoginActivity : ComponentActivity() {
                         Toast.makeText(this@LoginActivity, loginResponse?.message ?: "Gagal login", Toast.LENGTH_SHORT).show()
                     }
                 } else {
-                    Toast.makeText(this@LoginActivity, "Error: ${response.code()}", Toast.LENGTH_SHORT).show()
+                    val errorBody = response.errorBody()?.string()
+                    var errorMessage = "Login Gagal (Error ${response.code()})"
+                    if (!errorBody.isNullOrEmpty()) {
+                        try {
+                            val jsonObject = org.json.JSONObject(errorBody)
+                            errorMessage = jsonObject.optString("message", errorMessage)
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                        }
+                    }
+                    Toast.makeText(this@LoginActivity, errorMessage, Toast.LENGTH_LONG).show()
                 }
             }
 
