@@ -2,26 +2,21 @@ package com.example.scanmt.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-// Primary brand colors
-val CyanPrimary = Color(0xFF00B4D8)
-val CyanLight = Color(0xFF48CAE4)
-val BluePrimary = Color(0xFF0078FF)
-val BlueDeep = Color(0xFF023E8A)
-
-// Dark background palette
-val DarkBg = Color(0xFF0A0E1A)
-val DarkSurface = Color(0xFF0D1B2A)
-val DarkCard = Color(0xFF141E30)
-val DarkBorder = Color(0xFF1E3050)
+// Clean white / neutral palette
+val WhitePrimary = Color(0xFFFFFFFF)
+val WhiteSurface = Color(0xFFF5F5F5)
+val WhiteCard = Color(0xFFFAFAFA)
+val WhiteBorder = Color(0xFFE5E7EB)
 
 // Text
-val TextPrimary = Color(0xFFFFFFFF)
-val TextSecondary = Color(0xFF8899AA)
-val TextMuted = Color(0xFF445566)
+val TextPrimary = Color(0xFF111827)
+val TextSecondary = Color(0xFF6B7280)
+val TextMuted = Color(0xFF9CA3AF)
+val NeutralAccent = Color(0xFF374151)
 
 // Status
-val SuccessGreen = Color(0xFF00FF88)
-val ErrorRed = Color(0xFFFF4444)
+val SuccessGreen = Color(0xFF16A34A)
+val ErrorRed = Color(0xFFDC2626)
 
 // Legacy (kept for compatibility)
 val Purple80 = Color(0xFFD0BCFF)

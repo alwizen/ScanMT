@@ -22,7 +22,8 @@ object RetrofitClient {
     }
 
     fun getInstance(baseUrl: String): ApiService {
-        val normalizedUrl = if (baseUrl.endsWith("/")) baseUrl else "$baseUrl/"
+        val cleanUrl = baseUrl.trim().removeSuffix("/").removeSuffix("/api")
+        val normalizedUrl = "$cleanUrl/"
         return Retrofit.Builder()
             .baseUrl(normalizedUrl)
             .client(okHttpClient)
@@ -36,7 +37,8 @@ object RetrofitClient {
      * onResult(success: Boolean, message: String)
      */
     fun testConnection(baseUrl: String, onResult: (Boolean, String) -> Unit) {
-        val normalizedUrl = if (baseUrl.endsWith("/")) baseUrl else "$baseUrl/"
+        val cleanUrl = baseUrl.trim().removeSuffix("/").removeSuffix("/api")
+        val normalizedUrl = "$cleanUrl/"
         val client = OkHttpClient.Builder()
             .connectTimeout(10, TimeUnit.SECONDS)
             .readTimeout(10, TimeUnit.SECONDS)

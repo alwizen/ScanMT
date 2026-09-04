@@ -1,24 +1,24 @@
 package com.example.scanmt.ui.theme
 
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
-private val AppColorScheme = darkColorScheme(
-    primary = CyanPrimary,
+private val AppColorScheme = lightColorScheme(
+    primary = NeutralAccent,
     onPrimary = Color.White,
-    primaryContainer = DarkCard,
+    primaryContainer = WhiteCard,
     onPrimaryContainer = TextPrimary,
-    secondary = BluePrimary,
+    secondary = NeutralAccent,
     onSecondary = Color.White,
-    background = DarkBg,
+    background = WhitePrimary,
     onBackground = TextPrimary,
-    surface = DarkSurface,
+    surface = WhiteSurface,
     onSurface = TextPrimary,
-    surfaceVariant = DarkCard,
+    surfaceVariant = WhiteCard,
     onSurfaceVariant = TextSecondary,
-    outline = DarkBorder,
+    outline = WhiteBorder,
     error = ErrorRed,
     onError = Color.White
 )
