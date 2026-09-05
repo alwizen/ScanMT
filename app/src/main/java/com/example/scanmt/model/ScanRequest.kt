@@ -2,6 +2,9 @@ package com.example.scanmt.model
 
 import com.google.gson.annotations.SerializedName
 data class ScanRequest(
+    @SerializedName("scan_session_id")
+    val scanSessionId: Int,
+
     @SerializedName("driver_id")
     val driverId: Int,
 

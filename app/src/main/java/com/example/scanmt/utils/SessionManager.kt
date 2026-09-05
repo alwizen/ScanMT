@@ -12,6 +12,8 @@ class SessionManager(context: Context) {
         private const val KEY_DRIVER_NAME = "driver_name"
         private const val KEY_DRIVER_NO = "driver_no"
         private const val KEY_BASE_URL = "base_url"
+        private const val KEY_SCAN_SESSION_ID = "scan_session_id"
+        private const val KEY_TANKER_ID = "tanker_id"
         const val DEFAULT_BASE_URL = "http://192.168.110.112:8000/"
     }
 
@@ -43,6 +45,24 @@ class SessionManager(context: Context) {
 
     fun getDriverName(): String? {
         return prefs.getString(KEY_DRIVER_NAME, "")
+    }
+
+    fun saveScanSession(sessionId: Int, tankerId: Int) {
+        prefs.edit()
+            .putInt(KEY_SCAN_SESSION_ID, sessionId)
+            .putInt(KEY_TANKER_ID, tankerId)
+            .apply()
+    }
+
+    fun getScanSessionId(): Int = prefs.getInt(KEY_SCAN_SESSION_ID, -1)
+
+    fun getTankerId(): Int = prefs.getInt(KEY_TANKER_ID, -1)
+
+    fun clearScanSession() {
+        prefs.edit()
+            .remove(KEY_SCAN_SESSION_ID)
+            .remove(KEY_TANKER_ID)
+            .apply()
     }
 
     fun logout() {

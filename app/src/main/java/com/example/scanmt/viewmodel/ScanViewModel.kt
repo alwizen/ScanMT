@@ -9,6 +9,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.example.scanmt.model.ScanData
 import com.example.scanmt.model.ScanLogItem
+import com.example.scanmt.model.Tanker
 import com.example.scanmt.repository.ScanRepository
 
 enum class ScanMode {
@@ -16,6 +17,17 @@ enum class ScanMode {
 }
 
 class ScanViewModel(private val repository: ScanRepository) : ViewModel() {
+
+    var availableTankers by mutableStateOf<List<Tanker>>(emptyList())
+        private set
+    var selectedTanker by mutableStateOf<Tanker?>(null)
+        private set
+    var tankerLoading by mutableStateOf(false)
+        private set
+    var tankerError by mutableStateOf<String?>(null)
+        private set
+    var sessionLoading by mutableStateOf(false)
+        private set
 
     var driverName by mutableStateOf(repository.getDriverName())
         private set
@@ -38,6 +50,34 @@ class ScanViewModel(private val repository: ScanRepository) : ViewModel() {
     var scanHistoryList by mutableStateOf<List<ScanLogItem>>(emptyList())
     var isHistoryLoading by mutableStateOf(false)
     var historyError by mutableStateOf<String?>(null)
+
+    fun loadTankers() {
+        tankerLoading = true
+        tankerError = null
+        repository.getAvailableTankers { success, message, tankers ->
+            tankerLoading = false
+            if (success && tankers != null) {
+                availableTankers = tankers
+                selectedTanker = tankers.firstOrNull { it.id == repository.getTankerId() }
+            } else {
+                tankerError = message
+            }
+        }
+    }
+
+    fun selectTanker(tanker: Tanker, deviceUuid: String, onResult: (Boolean, String) -> Unit = { _, _ -> }) {
+        if (sessionLoading) return
+        sessionLoading = true
+        repository.startScanSession(tanker.id, deviceUuid) { success, message ->
+            sessionLoading = false
+            if (success) {
+                selectedTanker = tanker
+                scannedUidsInSession.clear()
+                resetScanState()
+            }
+            onResult(success, message)
+        }
+    }
 
     private val resetHandler = Handler(Looper.getMainLooper())
     private val resetRunnable = Runnable {
@@ -87,6 +127,10 @@ class ScanViewModel(private val repository: ScanRepository) : ViewModel() {
     }
 
     private fun kirimDataScan(uid: String, deviceUuid: String, onResult: ((Boolean, String) -> Unit)?) {
+        if (repository.getScanSessionId() < 1) {
+            onResult?.invoke(false, "Pilih tanker terlebih dahulu untuk memulai sesi scan")
+            return
+        }
         isSending = true
 
         repository.sendScanData(

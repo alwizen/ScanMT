@@ -5,6 +5,9 @@ import com.example.scanmt.model.LoginResponse
 import com.example.scanmt.model.ScanHistoryResponse
 import com.example.scanmt.model.ScanRequest
 import com.example.scanmt.model.ScanResponse
+import com.example.scanmt.model.ScanSessionRequest
+import com.example.scanmt.model.ScanSessionResponse
+import com.example.scanmt.model.TankerListResponse
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -16,6 +19,14 @@ interface ApiService {
     fun loginDriver(
         @Body request: LoginRequest
     ): Call<LoginResponse>
+
+    @GET("api/tankers/available")
+    fun getAvailableTankers(): Call<TankerListResponse>
+
+    @POST("api/scan-sessions")
+    fun startScanSession(
+        @Body request: ScanSessionRequest
+    ): Call<ScanSessionResponse>
 
     @POST("api/scan")
     fun sendScanData(

@@ -63,6 +63,7 @@ class MainActivity : ComponentActivity() {
                 return ScanViewModel(scanRepository) as T
             }
         })[ScanViewModel::class.java]
+        viewModel.loadTankers()
 
         nfcAdapter = NfcAdapter.getDefaultAdapter(this)
         if (nfcAdapter == null) {
